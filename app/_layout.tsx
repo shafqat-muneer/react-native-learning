@@ -1,6 +1,9 @@
 import { AuthProvider, useAuth } from "@/lib/auth-context";
 import { Stack, useRouter, useSegments } from "expo-router";
 import { useEffect } from "react";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { PaperProvider } from "react-native-paper";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 function RouteGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -8,51 +11,32 @@ function RouteGuard({ children }: { children: React.ReactNode }) {
   const segments = useSegments();
 
   useEffect(() => {
-    const isAuthGroup = segments[0] === "auth";
-    if (!user && isAuthGroup && !isLoadingUser) {
+    const inAuthGroup = segments[0] === "auth";
+
+    if (!user && !inAuthGroup && !isLoadingUser) {
       router.replace("/auth");
-    } else if (user && isAuthGroup && !isLoadingUser) {
+    } else if (user && inAuthGroup && !isLoadingUser) {
       router.replace("/");
     }
-  }, [user, segments]);
+  }, [user, segments, isLoadingUser]);
 
   return <>{children}</>;
 }
 
 export default function RootLayout() {
   return (
-    <AuthProvider>
-      <RouteGuard>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        </Stack>
-      </RouteGuard>
-    </AuthProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <AuthProvider>
+        <PaperProvider>
+          <SafeAreaProvider>
+            <RouteGuard>
+              <Stack>
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              </Stack>
+            </RouteGuard>
+          </SafeAreaProvider>
+        </PaperProvider>
+      </AuthProvider>
+    </GestureHandlerRootView>
   );
 }
-
-// import { Stack, useRouter } from "expo-router";
-// import { useEffect } from "react";
-
-// function RouteGuard({ children }: { children: React.ReactNode }) {
-//   const router = useRouter();
-//   const isAuth = false;
-
-//   useEffect(() => {
-//     if (!isAuth) {
-//       router.replace("/auth");
-//     }
-//   });
-
-//   return <>{children}</>;
-// }
-
-// export default function RootLayout() {
-//   return (
-//     <RouteGuard>
-//       <Stack>
-//         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-//       </Stack>
-//     </RouteGuard>
-//   );
-// }
