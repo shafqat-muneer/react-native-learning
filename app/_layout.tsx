@@ -1,24 +1,20 @@
-import { AuthProvider } from "@/lib/auth-context";
-import { Stack, useRootNavigationState, useRouter } from "expo-router";
+import { AuthProvider, useAuth } from "@/lib/auth-context";
+import { Stack, useRouter, useSegments } from "expo-router";
 import { useEffect } from "react";
 
 function RouteGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const navigationState = useRootNavigationState();
-  const isAuth = false;
+  const { user, isLoadingUser } = useAuth();
+  const segments = useSegments();
 
   useEffect(() => {
-    if (!navigationState?.key) return;
-
-    // Delay redirect until after Stack has mounted
-    const timeout = setTimeout(() => {
-      if (!isAuth) {
-        router.replace("/auth");
-      }
-    }, 0);
-
-    return () => clearTimeout(timeout);
-  }, [navigationState, isAuth, router]);
+    const isAuthGroup = segments[0] === "auth";
+    if (!user && isAuthGroup && !isLoadingUser) {
+      router.replace("/auth");
+    } else if (user && isAuthGroup && !isLoadingUser) {
+      router.replace("/");
+    }
+  }, [user, segments]);
 
   return <>{children}</>;
 }
