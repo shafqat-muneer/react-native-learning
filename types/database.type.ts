@@ -5,7 +5,13 @@ export interface Habit extends Models.Document {
   title: string;
   description: string;
   frequency: string;
-  streak_cout: number;
+  streak_count: number;
   last_completed: string;
   created_at: string;
+}
+
+export interface HabitCompletion extends Models.Document {
+  habit_id: string;
+  user_id: string;
+  completed_at: string;
 }
