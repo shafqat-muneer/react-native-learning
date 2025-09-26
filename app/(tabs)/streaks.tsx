@@ -157,74 +157,80 @@ export default function StreaksScreen() {
 
   const badgeStyles = [styles.badge1, styles.badge2, styles.badge3];
   return (
-    <View style={styles.container}>
-      <Text style={styles.title} variant="headlineSmall">
-        {" "}
-        Habit Streaks
-      </Text>
+    <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
+      <View style={styles.container}>
+        <Text style={styles.title} variant="headlineSmall">
+          {" "}
+          Habit Streaks
+        </Text>
 
-      {rankedHabits.length > 0 && (
-        <View style={styles.rankingContainer}>
-          <Text style={styles.rankingTitle}> 🏅 Top Streaks</Text>
-          {rankedHabits.slice(0, 3).map((item, key) => (
-            <View key={key} style={styles.rankingRow}>
-              <View style={[styles.rankingBadge, badgeStyles[key]]}>
-                <Text style={styles.rankingBadgeText}> {key + 1} </Text>
-              </View>
-              <Text style={styles.rankingHabit}> {item.habit.title}</Text>
-              <Text style={styles.rankingStreak}> {item.bestStreak}</Text>
-            </View>
-          ))}
-        </View>
-      )}
-
-      {habits.length === 0 ? (
-        <View>
-          <Text> No Habits yet. Add your first Habit!</Text>
-        </View>
-      ) : (
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          style={styles.container}
-        >
-          {rankedHabits.map(({ habit, streak, bestStreak, total }, key) => (
-            <Card
-              key={key}
-              style={[styles.card, key === 0 && styles.firstCard]}
-            >
-              <Card.Content>
-                <Text variant="titleMedium" style={styles.habitTitle}>
-                  {" "}
-                  {habit.title}
-                </Text>
-                <Text style={styles.habitDescription}>
-                  {" "}
-                  {habit.description}
-                </Text>
-                <View style={styles.statsRow}>
-                  <View style={styles.statBadge}>
-                    <Text style={styles.statBadgeText}> 🔥 {streak}</Text>
-                    <Text style={styles.statLabel}> Current</Text>
-                  </View>
-                  <View style={styles.statBadgeGold}>
-                    <Text style={styles.statBadgeText}> 🏆 {bestStreak}</Text>
-                    <Text style={styles.statLabel}> Best</Text>
-                  </View>
-                  <View style={styles.statBadgeGreen}>
-                    <Text style={styles.statBadgeText}> ✅ {total}</Text>
-                    <Text style={styles.statLabel}> Total</Text>
-                  </View>
+        {rankedHabits.length > 0 && (
+          <View style={styles.rankingContainer}>
+            <Text style={styles.rankingTitle}> 🏅 Top Streaks</Text>
+            {rankedHabits.slice(0, 3).map((item, key) => (
+              <View key={key} style={styles.rankingRow}>
+                <View style={[styles.rankingBadge, badgeStyles[key]]}>
+                  <Text style={styles.rankingBadgeText}> {key + 1} </Text>
                 </View>
-              </Card.Content>
-            </Card>
-          ))}
-        </ScrollView>
-      )}
-    </View>
+                <Text style={styles.rankingHabit}> {item.habit.title}</Text>
+                <Text style={styles.rankingStreak}> {item.bestStreak}</Text>
+              </View>
+            ))}
+          </View>
+        )}
+
+        {habits.length === 0 ? (
+          <View>
+            <Text> No Habits yet. Add your first Habit!</Text>
+          </View>
+        ) : (
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            style={styles.parentContainer}
+          >
+            {rankedHabits.map(({ habit, streak, bestStreak, total }, key) => (
+              <Card
+                key={key}
+                style={[styles.card, key === 0 && styles.firstCard]}
+              >
+                <Card.Content>
+                  <Text variant="titleMedium" style={styles.habitTitle}>
+                    {" "}
+                    {habit.title}
+                  </Text>
+                  <Text style={styles.habitDescription}>
+                    {" "}
+                    {habit.description}
+                  </Text>
+                  <View style={styles.statsRow}>
+                    <View style={styles.statBadge}>
+                      <Text style={styles.statBadgeText}> 🔥 {streak}</Text>
+                      <Text style={styles.statLabel}> Current</Text>
+                    </View>
+                    <View style={styles.statBadgeGold}>
+                      <Text style={styles.statBadgeText}> 🏆 {bestStreak}</Text>
+                      <Text style={styles.statLabel}> Best</Text>
+                    </View>
+                    <View style={styles.statBadgeGreen}>
+                      <Text style={styles.statBadgeText}> ✅ {total}</Text>
+                      <Text style={styles.statLabel}> Total</Text>
+                    </View>
+                  </View>
+                </Card.Content>
+              </Card>
+            ))}
+          </ScrollView>
+        )}
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  parentContainer: {
+    flex: 1,
+    backgroundColor: "#f5f5f5",
+  },
   container: {
     flex: 1,
     backgroundColor: "#f5f5f5",

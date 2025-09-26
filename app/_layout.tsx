@@ -1,8 +1,9 @@
 import { AuthProvider, useAuth } from "@/lib/auth-context";
 import { Stack, useRouter, useSegments } from "expo-router";
 import { useEffect } from "react";
+import { useColorScheme } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { PaperProvider } from "react-native-paper";
+import { MD3DarkTheme, MD3LightTheme, PaperProvider } from "react-native-paper";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 function RouteGuard({ children }: { children: React.ReactNode }) {
@@ -24,10 +25,13 @@ function RouteGuard({ children }: { children: React.ReactNode }) {
 }
 
 export default function RootLayout() {
+  const scheme = useColorScheme();
+  const theme = scheme === "dark" ? MD3DarkTheme : MD3LightTheme;
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <AuthProvider>
-        <PaperProvider>
+        <PaperProvider theme={theme}>
           <SafeAreaProvider>
             <RouteGuard>
               <Stack>

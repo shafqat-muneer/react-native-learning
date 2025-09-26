@@ -4,6 +4,7 @@ import { useRouter } from "expo-router";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { ID } from "react-native-appwrite";
+import { ScrollView } from "react-native-gesture-handler";
 import {
   Button,
   SegmentedButtons,
@@ -54,42 +55,53 @@ export default function AddHabitScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <TextInput
-        label="Title"
-        mode="outlined"
-        onChangeText={setTitle}
-        style={styles.input}
-      />
-      <TextInput
-        label="Description"
-        mode="outlined"
-        onChangeText={setDescription}
-        style={styles.input}
-      />
-      <View style={styles.frequencyContainer}>
-        <SegmentedButtons
-          value={frequency}
-          onValueChange={(value) => setFrequency(value as Frequency)}
-          buttons={FREQUENCIES.map((freq) => ({
-            value: freq,
-            label: freq.charAt(0).toUpperCase() + freq.slice(1),
-          }))}
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      style={styles.scrollViewContainer}
+    >
+      <View style={styles.container}>
+        <TextInput
+          label="Title"
+          mode="outlined"
+          onChangeText={setTitle}
+          style={styles.input}
         />
+        <TextInput
+          label="Description"
+          mode="outlined"
+          onChangeText={setDescription}
+          style={styles.input}
+        />
+        <View style={styles.frequencyContainer}>
+          <SegmentedButtons
+            value={frequency}
+            onValueChange={(value) => setFrequency(value as Frequency)}
+            buttons={FREQUENCIES.map((freq) => ({
+              value: freq,
+              label: freq.charAt(0).toUpperCase() + freq.slice(1),
+            }))}
+          />
+        </View>
+        <Button
+          mode="contained"
+          onPress={handleSubmit}
+          disabled={!title || !description}
+        >
+          Add Habit
+        </Button>
+        {error && <Text style={{ color: theme.colors.error }}> {error}</Text>}
       </View>
-      <Button
-        mode="contained"
-        onPress={handleSubmit}
-        disabled={!title || !description}
-      >
-        Add Habit
-      </Button>
-      {error && <Text style={{ color: theme.colors.error }}> {error}</Text>}
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  scrollViewContainer: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: "#f5f5f5",
+  },
+
   container: {
     flex: 1,
     padding: 16,

@@ -1,7 +1,6 @@
 // src/screens/HomeScreen.tsx
 import App from "@/src/state-management/redux-experiment";
-import React from "react";
-import { Button, Text } from "react-native";
+import { Button, Text, View } from "react-native";
 import { useUser } from "../../src/state-management/context-api-experiment";
 
 // By using Redux
@@ -10,12 +9,14 @@ export default function HomeScreen() {
   const { user, setUser } = useUser();
 
   return (
-    <>
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       {/* By using Context API */}
       <Text>Hello {user}</Text>
       <Button title="Change User" onPress={() => setUser("New User")} />
-      <App /> {/* By using Redux */}
-    </>
+
+      {/* By using Redux */}
+      <App />
+    </View>
   );
 }
 
