@@ -7,6 +7,7 @@ import {
   RealtimeResponse,
 } from "@/lib/appwrite";
 import { useAuth } from "@/lib/auth-context";
+import { fontFamily } from "@/styles/fontFamily";
 import { Habit, HabitCompletion } from "@/types/database.type";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useEffect, useRef, useState } from "react";
@@ -286,11 +287,13 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 4,
     color: "#22223b",
+    fontFamily: fontFamily.bold,
   },
   cardDescription: {
     fontSize: 15,
     marginBottom: 16,
-    color: "#6c6c80",
+    color: "#434382ff",
+    fontFamily: fontFamily.medium,
   },
   cardFooter: {
     flexDirection: "row",

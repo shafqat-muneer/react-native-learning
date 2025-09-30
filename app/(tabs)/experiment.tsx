@@ -11,7 +11,7 @@ export default function HomeScreen() {
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       {/* By using Context API */}
-      <Text>Hello {user}</Text>
+      <Text style={{ fontFamily: "Inter-Regular_Bold" }}>Hello {user}</Text>
       <Button title="Change User" onPress={() => setUser("New User")} />
 
       {/* By using Redux */}

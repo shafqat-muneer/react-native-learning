@@ -1,4 +1,5 @@
 import { useAuth } from "@/lib/auth-context";
+import { fontFamily } from "@/styles/fontFamily";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native";
@@ -111,6 +112,7 @@ const styles = StyleSheet.create({
   title: {
     textAlign: "center",
     marginBottom: 24,
+    fontFamily: fontFamily.light,
   },
   input: {
     marginBottom: 16,

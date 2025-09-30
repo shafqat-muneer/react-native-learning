@@ -1,0 +1,18 @@
+export const fontFamily = {
+  bold: "SUSEMonoBold",
+  boldItalic: "SUSEMonoBoldItalic",
+  extraBold: "SUSEMonoExtraBold",
+  extraBoldItalic: "SUSEMonoExtraBoldItalic",
+  extraLight: "SUSEMonoExtraLight",
+  extraLightItalic: "SUSEMonoExtraLightItalic",
+  italic: "SUSEMonoItalic",
+  light: "SUSEMonoLight",
+  lightItalic: "SUSEMonoLightItalic",
+  medium: "SUSEMonoMedium",
+  mediumItalic: "SUSEMonoMediumItalic",
+  regular: "SUSEMonoRegular",
+  semiBold: "SUSEMonoSemiBold",
+  semiBoldItalic: "SUSEMonoSemiBoldItalic",
+  thin: "SUSEMonoThin",
+  thinItalic: "SUSEMonoThinItalic",
+};

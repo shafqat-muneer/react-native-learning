@@ -1,10 +1,21 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AntDesign from "@expo/vector-icons/AntDesign";
+// import { useFonts } from "expo-font";
+// import { Text } from "react-native";
 
 import { Tabs } from "expo-router";
 import { UserProvider } from "../../src/state-management/context-api-experiment";
 
 export default function TabsLayout() {
+  // const [fontsLoaded] = useFonts({
+  //   PoppinsRegular: require("../assets/fonts/Poppins-Regular.ttf"),
+  //   PoppinsBold: require("../assets/fonts/Poppins-Bold.ttf"),
+  // });
+
+  // if (!fontsLoaded) {
+  //   return <Text>Loading...</Text>; // or return null
+  // }
+
   return (
     <UserProvider>
       <Tabs
