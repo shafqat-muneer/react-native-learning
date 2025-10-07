@@ -11,7 +11,7 @@ import { fontFamily } from "@/styles/fontFamily";
 import { Habit, HabitCompletion } from "@/types/database.type";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useEffect, useRef, useState } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import { ID, Query } from "react-native-appwrite";
 import { Swipeable } from "react-native-gesture-handler";
 import { Button, Surface, Text } from "react-native-paper";
@@ -80,6 +80,7 @@ export default function Index() {
   }, [user]);
 
   const fetchHabits = async () => {
+    console.log("fetch habits called...");
     try {
       const response = await databases.listDocuments(
         DATABASE_ID,
@@ -94,6 +95,7 @@ export default function Index() {
   };
 
   const fetchTodayCompletions = async () => {
+    console.log("fetch today's completions called...");
     try {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
@@ -170,6 +172,19 @@ export default function Index() {
     </View>
   );
 
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = async () => {
+    try {
+      setRefreshing(true);
+      await Promise.all([fetchHabits(), fetchTodayCompletions()]);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -181,70 +196,74 @@ export default function Index() {
           Sign Out
         </Button>
       </View>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {habits?.length === 0 ? (
+
+      <FlatList
+        data={habits ?? []}
+        keyExtractor={(habit) => habit.$id}
+        showsVerticalScrollIndicator={false}
+        refreshing={refreshing}
+        onRefresh={onRefresh}
+        // Empty state
+        ListEmptyComponent={
           <View style={styles.emptyState}>
             <Text style={styles.emptyStateText}>
               No Habits yet. Add your first Habit!
             </Text>
           </View>
-        ) : (
-          habits?.map((habit, key) => (
-            <Swipeable
-              ref={(ref) => {
-                swipeableRefs.current[habit.$id] = ref;
-              }}
-              key={key}
-              overshootLeft={false}
-              overshootRight={false}
-              renderLeftActions={renderLeftActions}
-              renderRightActions={() => renderRightActions(habit.$id)}
-              onSwipeableOpen={(direction) => {
-                if (direction === "left") {
-                  handleDeleteHabit(habit.$id);
-                } else if (direction === "right") {
-                  handleCompleteHabit(habit.$id);
-                }
+        }
+        // Render each habit
+        renderItem={({ item }) => (
+          <Swipeable
+            ref={(ref) => {
+              swipeableRefs.current[item.$id] = ref;
+            }}
+            overshootLeft={false}
+            overshootRight={false}
+            renderLeftActions={renderLeftActions}
+            renderRightActions={() => renderRightActions(item.$id)}
+            onSwipeableOpen={(direction) => {
+              if (direction === "left") {
+                handleDeleteHabit(item.$id);
+              } else if (direction === "right") {
+                handleCompleteHabit(item.$id);
+              }
 
-                swipeableRefs.current[habit.$id]?.close();
-              }}
+              swipeableRefs.current[item.$id]?.close();
+            }}
+          >
+            <Surface
+              style={[
+                styles.card,
+                isHabitCompleted(item.$id) && styles.cardCompleted,
+              ]}
+              elevation={0}
             >
-              <Surface
-                style={[
-                  styles.card,
-                  isHabitCompleted(habit.$id) && styles.cardCompleted,
-                ]}
-                elevation={0}
-              >
-                <View style={styles.cardContent}>
-                  <Text style={styles.cardTitle}>{habit.title}</Text>
-                  <Text style={styles.cardDescription}>
-                    {habit.description}
-                  </Text>
-                  <View style={styles.cardFooter}>
-                    <View style={styles.streakBadge}>
-                      <MaterialCommunityIcons
-                        name="fire"
-                        size={18}
-                        color={"#ff9800"}
-                      />
-                      <Text style={styles.streakText}>
-                        {habit.streak_count} day streak
-                      </Text>
-                    </View>
-                    <View style={styles.frequencyBadge}>
-                      <Text style={styles.frequencyText}>
-                        {habit.frequency.charAt(0).toUpperCase() +
-                          habit.frequency.slice(1)}
-                      </Text>
-                    </View>
+              <View style={styles.cardContent}>
+                <Text style={styles.cardTitle}>{item.title}</Text>
+                <Text style={styles.cardDescription}>{item.description}</Text>
+                <View style={styles.cardFooter}>
+                  <View style={styles.streakBadge}>
+                    <MaterialCommunityIcons
+                      name="fire"
+                      size={18}
+                      color={"#ff9800"}
+                    />
+                    <Text style={styles.streakText}>
+                      {item.streak_count} day streak
+                    </Text>
+                  </View>
+                  <View style={styles.frequencyBadge}>
+                    <Text style={styles.frequencyText}>
+                      {item.frequency.charAt(0).toUpperCase() +
+                        item.frequency.slice(1)}
+                    </Text>
                   </View>
                 </View>
-              </Surface>
-            </Swipeable>
-          ))
+              </View>
+            </Surface>
+          </Swipeable>
         )}
-      </ScrollView>
+      />
     </View>
   );
 }
