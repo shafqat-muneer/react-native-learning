@@ -12,6 +12,8 @@ import {
   Text,
 } from "react-native-paper";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { Provider } from "react-redux";
+import { store } from "../src/app/store";
 
 function RouteGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -60,17 +62,22 @@ export default function RootLayout() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <AuthProvider>
-        <PaperProvider theme={theme}>
-          <SafeAreaProvider>
-            <RouteGuard>
-              <Stack>
-                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              </Stack>
-            </RouteGuard>
-          </SafeAreaProvider>
-        </PaperProvider>
-      </AuthProvider>
+      <Provider store={store}>
+        <AuthProvider>
+          <PaperProvider theme={theme}>
+            <SafeAreaProvider>
+              <RouteGuard>
+                <Stack>
+                  <Stack.Screen
+                    name="(tabs)"
+                    options={{ headerShown: false }}
+                  />
+                </Stack>
+              </RouteGuard>
+            </SafeAreaProvider>
+          </PaperProvider>
+        </AuthProvider>
+      </Provider>
     </GestureHandlerRootView>
   );
 }
