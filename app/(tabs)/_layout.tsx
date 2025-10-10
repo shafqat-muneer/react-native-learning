@@ -1,4 +1,4 @@
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import AntDesign from "@expo/vector-icons/AntDesign";
 // import { useFonts } from "expo-font";
 // import { Text } from "react-native";
@@ -77,6 +77,15 @@ export default function TabsLayout() {
             title: "Experiment",
             tabBarIcon: ({ color, size }) => (
               <AntDesign name="experiment" size={size} color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="offline-mode"
+          options={{
+            title: "Offline",
+            tabBarIcon: ({ color, size }) => (
+              <MaterialIcons name="save" size={size} color={color} />
             ),
           }}
         />
